@@ -9,8 +9,9 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 const showItems = (datos) => {
-	let items = datos.map((d) => {
-		return `<article class="item">
+	let items = datos
+		.map((d) => {
+			return `<article class="item">
 		<img src=${d.imgSrc} alt="" />
 		<div class="item-info">
 			<header>
@@ -21,27 +22,29 @@ const showItems = (datos) => {
 		</div>
 	</article>
 	`;
-	});
-	items = items.join('');
+		})
+		.join('');
 	tabsItems.innerHTML = items;
 };
 
 const categorybuttons = () => {
 	const getCategories = (datos) => {
-		let categoriesFilter = ['all'];
-		datos.forEach((d) => {
-			if (!categoriesFilter.includes(d.category)) {
-				categoriesFilter.push(d.category);
-			}
-		}); // Falta aprender bien reduce.
-		// Y revisar como lo hicieron en el curso.
+		let categoriesFilter = datos.reduce(
+			(values, item) => {
+				if (!values.includes(item.category)) {
+					values.push(item.category);
+				}
+				return values;
+			},
+			['all']
+		);
 		showButtons(categoriesFilter);
 	};
 
 	const showButtons = (categoriesFilter) => {
 		const buttons = categoriesFilter
 			.map((d) => {
-				return `<button class="tab-button" data-id="${d}">${d}</button>`;
+				return `<button class="tab-button" data-id="${d}">${d.toUpperCase()}</button>`;
 			})
 			.join('');
 		tabsButtons.innerHTML = buttons;
@@ -64,7 +67,3 @@ const categorybuttons = () => {
 	};
 	getCategories(datos);
 };
-
-/**
- * Ahora a hacerlo con "ALL"
- */
